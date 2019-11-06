@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        idShowDeviceName.text =  " Value "+Verify.isAirplaneModeOn(this)
+        idShowDeviceName.text =  " Value "+Verify.isSoundEffectsEnabled(this);
        // idShowVersion.text = Verify.getVersionAndSKD()
         idShowVersion.text = Verify.getVersionAndSKD()
 

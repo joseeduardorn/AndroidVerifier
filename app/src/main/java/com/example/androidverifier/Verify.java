@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -20,11 +21,14 @@ import android.os.RecoverySystem;
 import android.provider.Settings;
 import android.telephony.AvailableNetworkInfo;
 import android.telephony.TelephonyManager;
+import android.text.BoringLayout;
+
 import androidx.core.app.NotificationManagerCompat;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 
 public class Verify {
@@ -164,7 +168,7 @@ public class Verify {
     /**
      *
      * @param context
-     * @return default assistant or null if there is none
+     * @return default assistant or null if there is none pending
      */
     public static ComponentName getCurrentAssist(Context context){
         final String setting = Settings.Secure.getString(context.getContentResolver(), "assistant");
@@ -172,6 +176,20 @@ public class Verify {
             return ComponentName.unflattenFromString(setting);
         }
         return null;
+    }
+
+    /**
+     *
+     * @param context
+     * @return true if the Touch Sound Enable
+     */
+    public static boolean isTouchSoundEnabled(Context context){
+        final String sound = Settings.System.getString(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED);
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, 0) != 0;
+    }
+
+    public static boolean isVibrateOn(Context context){
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.VIBRATE_ON,0) != 0;
     }
 
 }
