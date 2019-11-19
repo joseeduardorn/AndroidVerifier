@@ -35,6 +35,8 @@ public class Verify {
 
     public static int DATA_DISCONNECTED = 0; //Connected 2, connection 1
     public static int DATA_SUSPENDED = 3;
+    public static String LOCKSCREEN_SOUNDS_ENABLED = "lockscreen_sounds_enabled";
+    public static String LOCKSCREEN_LOCK_AFTER_TIMEOUT = "lock_screen_lock_after_timeout";
 
     public static String getDeviceName() {
         return Build.MODEL;
@@ -184,12 +186,69 @@ public class Verify {
      * @return true if the Touch Sound Enable
      */
     public static boolean isTouchSoundEnabled(Context context){
-        final String sound = Settings.System.getString(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED);
+       // final String sound = Settings.System.getString(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED);
         return Settings.System.getInt(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, 0) != 0;
     }
 
-    public static boolean isVibrateOn(Context context){
-        return Settings.System.getInt(context.getContentResolver(), Settings.System.VIBRATE_ON,0) != 0;
+    /**
+     *
+     * @param context
+     * @return true if Dial pad touch tones
+     */
+    public static boolean isDtmfToneEnabled(Context context){
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.DTMF_TONE_WHEN_DIALING, 0) != 0;
     }
 
+    /*
+    public static boolean isVibrateOn(Context context){
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.VIBRATE_ON,0) != 0;
+    }*/
+
+    /**
+     *
+     * @param context
+     * @return Whether haptic feedback (Vibrate on tap) is enabled.
+     * The value is boolean (1 or 0) Vibrate on touch
+     */
+    public static boolean isHapticFeedbackEnabled(Context context){
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) != 0;
+    }
+
+    /**
+     *
+     * @param context
+     * @return sound when lockscreen sound enabled
+     */
+    public static boolean islockScreenSoundsEnabled(Context context){
+        return Settings.System.getInt(context.getContentResolver(), Verify.LOCKSCREEN_SOUNDS_ENABLED, 0) != 0;
+    }
+
+    /**
+     *
+     * @param context
+     * @return The amount of time in milliseconds before the device goes to sleep or begins to dream after a period of inactivity.
+     * @throws Settings.SettingNotFoundException
+     * @help 60000 = 1 default
+     */
+    public static Integer getTimeOutOff(Context context) throws Settings.SettingNotFoundException {
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
+    }
+
+    /**
+     *
+     * @param context
+     * @return Setting to showing password characters in text editors. 1 = On, 0 = Off
+     */
+    public static boolean isShowPasswordEnabled(Context context){
+        return Settings.System.getInt(context.getContentResolver(), Settings.System.TEXT_SHOW_PASSWORD, 0 )!= 0;
+    }
+
+    /**
+     * El valor  para  "Bloquear automáticamente"  se  aconseja  que  sea  deentre 5 y  30 segundos.
+     * @param context
+     * @return 0, 5000, 15000
+     */
+    public static Long getLockAutomatically(Context context){
+        return Settings.Secure.getLong(context.getContentResolver(), Verify.LOCKSCREEN_LOCK_AFTER_TIMEOUT,0);
+    }
 }

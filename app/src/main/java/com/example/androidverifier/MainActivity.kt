@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        idShowDeviceName.text =  " Value "+Verify.isTouchSoundEnabled(this);
+        idShowDeviceName.text =  " Value "+Verify.getLockAutomatically(this);
        // idShowVersion.text = Verify.getVersionAndSKD()
         idShowVersion.text = Verify.getVersionAndSKD()
 
