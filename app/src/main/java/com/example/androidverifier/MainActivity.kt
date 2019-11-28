@@ -1,14 +1,22 @@
 package com.example.androidverifier
 
+import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.JsonElement
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
 //https://stackoverflow.com/questions/29153255/send-information-from-android-application-to-a-web-service-and-back
@@ -22,21 +30,77 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-
         idShowDeviceName.text =  Verify.getDeviceName()//" Value "+Verify.isUSBMassStorageEnabled(this);
         idShowVersion.text = Verify.getVersionAndSKD()
 
         if(Verify.getVersion() != "9" ){
             txtemail.isEnabled = false
             id_btn_verify.isEnabled = false
-            Toast.makeText(this,"Solo Android 9(Pie) disponible para evaluar",Toast.LENGTH_LONG).show()
+            //Toast.makeText(this,"Solo Android 9(Pie) disponible para evaluar",Toast.LENGTH_LONG).show()
+            MessageBuilder.makeToastLengthLong(this, "Solo Android 9(Pie) disponible para evaluar")
         }
 
         if(!Verify.isNetworkAvailable(this)){
             //Toast.makeText(getActivity(), "This is my Toast message!", Toast.LENGTH_LONG).show();
-            Toast.makeText(this,"Internet no disponible",Toast.LENGTH_LONG).show()
+            //Toast.makeText(this,"Internet no disponible",Toast.LENGTH_LONG).show()
+            MessageBuilder.makeToastLengthLong(this, "Internet no disponible")
             id_btn_verify.isEnabled = false
         }
+
+        id_btn_verify.setOnClickListener{ view ->
+            //to do
+
+            if(txtemail.text.toString()== null || txtemail.text.toString().isEmpty() ){
+                MessageBuilder.makeToastLengthLong(this, "Necesita ingresar un correo")
+                return@setOnClickListener;
+            }
+            val apiSIn = ApiService.getRetrofitBuilder().create(ApiInterface::class.java)
+            val jsonBuilder = JSONBuilder();
+            //jsonBuilder.addJsonObject("email_user", txtemail.text.toString())
+           Log.d("json builder",
+               jsonBuilder.makeJSONVerifyBody(this, txtemail.text.toString() ).toString()
+           )
+            //val configObject = ConfigObject(this)
+
+            val callProcess : Call<JsonElement>? = apiSIn.getProcess(jsonBuilder.makeJSONVerifyBody(this,txtemail.text.toString()))//configObject.getConfigObject())//(jsonBuilder.makeJSONVerifyBody(this))
+
+            callProcess?.enqueue(object : Callback<JsonElement>{
+                override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                    Log.d("json failure",t.toString())
+                }
+
+                override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                    Log.d("response body",response.body().toString());
+                    MessageBuilder.makeToastLengthLong(this@MainActivity, "Error inesperado")
+                    //Log.d("response raw",response.raw().toString());
+                    Log.d("response message",response.message().toString());
+                    if(response.isSuccessful){
+                        MessageBuilder.makeToastLengthLong(this@MainActivity, "Se ha enviado un correo con la evaluación")
+                    }
+
+                }
+            })
+
+
+        /*
+            val callGet : Call<JsonElement>? = apiSIn.getapi()
+
+            callGet?.enqueue(object : Callback<JsonElement>{
+                override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                    Log.d("json failure",t.toString())
+                }
+
+                override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                    // val to: String? = Gson().toJson(response.body())
+
+                    //Log.d("TAG Request", call.request().toString().toString() )
+                    Log.d("TAG Response Code ", response.body().toString() )
+
+                }
+            }) */
+
+        }
+
 
     }
 

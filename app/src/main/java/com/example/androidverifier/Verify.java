@@ -105,7 +105,7 @@ public class Verify {
      * wheter the bluetooth is enabled or disabled
      * @return true if Bluetooth is enabled
      */
-    public static boolean isBluetoothEnabled() {
+    public static Boolean isBluetoothEnabled() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         boolean enabled = bluetoothAdapter.isEnabled();
         return enabled;
@@ -115,7 +115,7 @@ public class Verify {
      * @return true if NFC is enabled
      *
      */
-    public static boolean isNFCEnabled(Context context) {
+    public static Boolean isNFCEnabled(Context context) {
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         boolean enabled = nfcAdapter.isEnabled();
         return enabled;
@@ -155,7 +155,7 @@ public class Verify {
      * @param context
      * @return true if the location is available
      */
-    public static boolean isGPSEnabled(Context context){//)
+    public static Boolean isGPSEnabled(Context context){//)
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean value = false;
         try {
@@ -173,7 +173,7 @@ public class Verify {
      * @param context
      * @return
      */
-    public static boolean isNotificationEnabled(Context context){
+    public static Boolean isNotificationEnabled(Context context){
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
        // return notificationManager.areNotificationsEnabled();
         return notificationManagerCompat.areNotificationsEnabled();
@@ -184,7 +184,7 @@ public class Verify {
      * @param context
      * @return true if the hotspot is enable
      */
-    public static boolean isWifiHotspotEnabled(Context context) {
+    public static Boolean isWifiHotspotEnabled(Context context) {
 
         WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
 
@@ -211,7 +211,7 @@ public class Verify {
      * @param context
      * @return true if PowerSaveMode is Enable
      */
-    public static boolean isPowerSaveModeEnabled(Context context){
+    public static Boolean isPowerSaveModeEnabled(Context context){
         PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         return powerManager.isPowerSaveMode();
     }
@@ -224,7 +224,7 @@ public class Verify {
      * @param context
      * @return true if enabled.
      */
-    public static boolean isAirplaneModeOn(Context context) {
+    public static Boolean isAirplaneModeOn(Context context) {
         return Settings.System.getInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
     }
 
@@ -246,7 +246,7 @@ public class Verify {
      * @param context
      * @return true if the Touch Sound Enable
      */
-    public static boolean isTouchSoundEnabled(Context context){
+    public static Boolean isTouchSoundEnabled(Context context){
        // final String sound = Settings.System.getString(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED);
         return Settings.System.getInt(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, 0) != 0;
     }
@@ -256,7 +256,7 @@ public class Verify {
      * @param context
      * @return true if Dial pad touch tones
      */
-    public static boolean isDtmfToneEnabled(Context context){
+    public static Boolean isDtmfToneEnabled(Context context){
         return Settings.System.getInt(context.getContentResolver(), Settings.System.DTMF_TONE_WHEN_DIALING, 0) != 0;
     }
 
@@ -271,7 +271,7 @@ public class Verify {
      * @return Whether haptic feedback (Vibrate on tap) is enabled.
      * The value is boolean (1 or 0) Vibrate on touch
      */
-    public static boolean isHapticFeedbackEnabled(Context context){
+    public static Boolean isHapticFeedbackEnabled(Context context){
         return Settings.System.getInt(context.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) != 0;
     }
 
@@ -280,7 +280,7 @@ public class Verify {
      * @param context
      * @return sound when lockscreen sound enabled
      */
-    public static boolean islockScreenSoundsEnabled(Context context){
+    public static Boolean islockScreenSoundsEnabled(Context context){
         return Settings.System.getInt(context.getContentResolver(), Verify.LOCKSCREEN_SOUNDS_ENABLED, 0) != 0;
     }
 
