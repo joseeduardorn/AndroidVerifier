@@ -1,6 +1,7 @@
 package com.example.androidverifier;
 
 import android.content.Context;
+import android.provider.Settings;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,11 +9,12 @@ import retrofit2.SkipCallbackExecutor;
 
 public class ConfigObject {
 
+    public static  final String EMAIL_USER = "email_user";
     public static final String DEVICE_ANDROID_VERSION = "device_android_version";
     public static final String DEVICE_SDK_VERSION = "device_android_sdk";
     public static final String DEVICE_SECURE = "device_secure";
     public static final String BLUETOOTH = "bluetooth";
-    public static final String NCF = "ncf";
+    public static final String NFC = "nfc";
     public static final String GPS = "gps";
     public static final String NOTIFICATIONS = "notifications";
     public static final String WIFI_HOSTPOT = "wifi_hostpot";
@@ -32,7 +34,8 @@ public class ConfigObject {
     public static final String BLUETOOTH_NAME = "bluetooth_name";
     public static final String DHCP_INFO = "dhcp_info";
 
-
+    @SerializedName(ConfigObject.EMAIL_USER)
+    public String email_user;
 
     @SerializedName(ConfigObject.DEVICE_ANDROID_VERSION)
     public String device_android_version;
@@ -46,8 +49,8 @@ public class ConfigObject {
     @SerializedName(ConfigObject.BLUETOOTH)
     public String bluetooth;
 
-    @SerializedName(ConfigObject.NCF)
-    public String ncf;
+    @SerializedName(ConfigObject.NFC)
+    public String nfc;
 
     @SerializedName(ConfigObject.GPS)
     public String gps;
@@ -68,25 +71,25 @@ public class ConfigObject {
     public String voice_assistant;
 
     @SerializedName(ConfigObject.TOUCHED_SOUND)
-    public String touched_soudn;
+    public String touched_sound;
 
     @SerializedName(ConfigObject.DTMF_TONE)
     public String dtmf_tone;
 
     @SerializedName(ConfigObject.HAPTIC_FEEDBACK)
-    public String haptic_eedback;
+    public String haptic_feedback;
 
     @SerializedName(ConfigObject.LOCK_SCREEN_SOUNDS)
     public String lock_screen_sounds;
 
     @SerializedName(ConfigObject.SCREEN_OFF_TIMEOUT)
-    public String screen_off_timeout;
+    public Integer screen_off_timeout;
 
     @SerializedName(ConfigObject.TEXT_SHOW_PASSWORD)
     public String text_show_password;
 
     @SerializedName(ConfigObject.LOCK_SCREEN_AFTER)
-    public String lock_screen_after;
+    public Long lock_screen_after;
 
     // validation only in the webservice
     @SerializedName(ConfigObject.DEVICE_NAME)
@@ -120,10 +123,32 @@ public class ConfigObject {
             localObject.put(JSONBuilder.BLUETOOTH_NAME, Verify.getLocalBluetoothName());
             localObject.put(JSONBuilder.DHCP_INFO, Verify.getDHCPInfo(context));*/
 
-    public ConfigObject(Context context){
+    public ConfigObject(Context context, String email_user){
+        this.email_user = email_user;
         getdevice_android_version();
         getdevice_sdk_version();
         getdevice_secure(context);
+        getbluetooth();
+        getnfc(context);
+        getgps(context);
+        getwifi_hostpot(context);
+        getpower_save(context);
+        getairplane_mode(context);
+        getvoice_assistant(context);
+        gettouched_sound(context);
+        getdtmf_tone(context);
+        gethaptic_feedback(context);
+        getlock_screen_sounds(context);
+        try {
+            getscreen_off_timeout(context);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        gettext_show_password(context);
+        getlock_screen_after(context);
+        getdevice_name();
+        getbluetooth_name();
+        getdhcp_info(context);
     }
 
     public ConfigObject getConfigObject(){
@@ -142,42 +167,82 @@ public class ConfigObject {
 
 
     public String getdevice_secure(Context context){
-        device_secure = Verify.isDeviceSecure(context).toString();
+        device_secure =  Verify.isDeviceSecure(context).toString();
         return device_secure;
     }
     public String getbluetooth(){
-        bluetooth = Verify.isBluetoothEnabled().toString();
+        bluetooth = Boolean.toString(Verify.isBluetoothEnabled());
         return bluetooth;
     }
 
-    public String getncf(Context context){
-        ncf = Verify.isNFCEnabled(context).toString();
-        return ncf;
+    public String getnfc(Context context){
+        nfc = Boolean.toString(Verify.isNFCEnabled(context));
+        return nfc;
     }
 
     public String getgps(Context context){
-        gps = Verify.isGPSEnabled(context).toString();
+        gps = Boolean.toString(Verify.isGPSEnabled(context));
         return gps;
     }
     public String getnotifications(){
         return notifications;
     }
     public String getwifi_hostpot(Context context){
-        wifi_hostpot = Verify.isWifiHotspotEnabled(context).toString();
+        wifi_hostpot = Boolean.toString(Verify.isWifiHotspotEnabled(context));
         return wifi_hostpot;
     }
-    /*
-    power_save;
-    airplane_mode;
-    voice_assistant;
-    touched_soudn;
-    dtmf_tone;
-    haptic_eedback;
-    lock_screen_sounds;
-    screen_off_timeout;
-    text_show_password;
-    lock_screen_after;
-    device_name;
-    bluetooth_name;
-    dhcp_info; */
+    public String getpower_save(Context context){
+        power_save = Boolean.toString(Verify.isPowerSaveModeEnabled(context));
+        return power_save;
+    }
+    public String getairplane_mode(Context context){
+        airplane_mode = Boolean.toString(Verify.isAirplaneModeOn(context));
+        return airplane_mode;
+    }
+    public String getvoice_assistant(Context context){
+        voice_assistant = Verify.getCurrentAssist(context).toString();
+        return voice_assistant;
+    }
+
+    public String gettouched_sound(Context context){
+        touched_sound = Boolean.toString(Verify.isTouchSoundEnabled(context));
+        return touched_sound;
+    }
+    public String getdtmf_tone(Context context){
+        dtmf_tone = Boolean.toString(Verify.isDtmfToneEnabled(context));
+        return dtmf_tone;
+    }
+    public String gethaptic_feedback(Context context){
+        haptic_feedback = Boolean.toString(Verify.isHapticFeedbackEnabled(context));
+        return haptic_feedback;
+    }
+    public String getlock_screen_sounds(Context context){
+        lock_screen_sounds = Boolean.toString(Verify.islockScreenSoundsEnabled(context));
+        return lock_screen_sounds;
+    }
+    public Integer getscreen_off_timeout(Context context) throws Settings.SettingNotFoundException {
+        screen_off_timeout = Verify.getScreenOffTimeout(context);
+        return screen_off_timeout;
+    }
+    public String gettext_show_password(Context context){
+        text_show_password = Boolean.toString(Verify.isTextShowPasswordEnabled(context));
+        return text_show_password;
+    }
+
+    public Long getlock_screen_after(Context context){
+        lock_screen_after = Verify.getLockscreenAfter(context);
+        return lock_screen_after;
+    }
+    public String getdevice_name(){
+        device_name = Verify.getDeviceName();
+        return device_name;
+    }
+    public String getbluetooth_name(){
+        bluetooth_name = Verify.getLocalBluetoothName();
+        return bluetooth_name;
+    }
+    public String getdhcp_info(Context context){
+        dhcp_info = Verify.getDHCPInfo(context);
+        return dhcp_info;
+    }
 }

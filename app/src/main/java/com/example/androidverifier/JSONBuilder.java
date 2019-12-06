@@ -20,7 +20,7 @@ public class JSONBuilder {
     public static final String DEVICE_SDK_VERSION = "device_android_sdk";
     public static final String DEVICE_SECURE = "device_secure";
     public static final String BLUETOOTH = "bluetooth";
-    public static final String NCF = "ncf";
+    public static final String NFC = "nfc";
     public static final String GPS = "gps";
     public static final String NOTIFICATIONS = "notifications";
     public static final String WIFI_HOSTPOT = "wifi_hostpot";
@@ -60,9 +60,10 @@ public class JSONBuilder {
             }
             localObject.put(JSONBuilder.DEVICE_ANDROID_VERSION, Verify.getVersion());
             localObject.put(JSONBuilder.DEVICE_SDK_VERSION, Verify.getSDK());
+
             localObject.put(JSONBuilder.DEVICE_SECURE, Verify.doesDeviceHaveSecuritySetup(context));
             localObject.put(JSONBuilder.BLUETOOTH, Verify.isBluetoothEnabled());
-            localObject.put(JSONBuilder.NCF, Verify.isNFCEnabled(context));
+            localObject.put(JSONBuilder.NFC, Verify.isNFCEnabled(context));
             localObject.put(JSONBuilder.GPS, Verify.isGPSEnabled(context));
             localObject.put(JSONBuilder.WIFI_HOSTPOT, Verify.isWifiHotspotEnabled(context));
             localObject.put(JSONBuilder.POWER_SAVE, Verify.isPowerSaveModeEnabled(context));

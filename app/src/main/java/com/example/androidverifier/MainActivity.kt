@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -50,8 +51,12 @@ class MainActivity : AppCompatActivity() {
         id_btn_verify.setOnClickListener{ view ->
             //to do
 
-            if(txtemail.text.toString()== null || txtemail.text.toString().isEmpty() ){
+            if(txtemail.text.toString().isEmpty() ){
                 MessageBuilder.makeToastLengthLong(this, "Necesita ingresar un correo")
+                return@setOnClickListener;
+            }
+            if(!Patterns.EMAIL_ADDRESS.matcher(txtemail.text.toString()).matches() ){
+                MessageBuilder.makeToastLengthLong(this, "Dirección de correo no validad")
                 return@setOnClickListener;
             }
             val apiSIn = ApiService.getRetrofitBuilder().create(ApiInterface::class.java)
@@ -60,9 +65,10 @@ class MainActivity : AppCompatActivity() {
            Log.d("json builder",
                jsonBuilder.makeJSONVerifyBody(this, txtemail.text.toString() ).toString()
            )
-            //val configObject = ConfigObject(this)
+            val configObject = ConfigObject(this, txtemail.text.toString())
 
-            val callProcess : Call<JsonElement>? = apiSIn.getProcess(jsonBuilder.makeJSONVerifyBody(this,txtemail.text.toString()))//configObject.getConfigObject())//(jsonBuilder.makeJSONVerifyBody(this))
+           // val callProcess : Call<JsonElement>? = apiSIn.getProcess(jsonBuilder.makeJSONVerifyBody(this,txtemail.text.toString()))//configObject.getConfigObject())//(jsonBuilder.makeJSONVerifyBody(this))
+            val callProcess : Call<JsonElement>? = apiSIn.getProcess(configObject)
 
             callProcess?.enqueue(object : Callback<JsonElement>{
                 override fun onFailure(call: Call<JsonElement>, t: Throwable) {
