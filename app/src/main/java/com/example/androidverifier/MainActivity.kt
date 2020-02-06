@@ -34,11 +34,11 @@ class MainActivity : AppCompatActivity() {
         idShowDeviceName.text =  Verify.getDeviceName()//" Value "+Verify.isUSBMassStorageEnabled(this);
         idShowVersion.text = Verify.getVersionAndSKD()
 
-        if(Verify.getVersion() != "9" ){
+        if(  Verify.getVersion() != "9" && Verify.getVersion() != "10" ){
             txtemail.isEnabled = false
             id_btn_verify.isEnabled = false
             //Toast.makeText(this,"Solo Android 9(Pie) disponible para evaluar",Toast.LENGTH_LONG).show()
-            MessageBuilder.makeToastLengthLong(this, "Solo Android 9(Pie) disponible para evaluar")
+            MessageBuilder.makeToastLengthLong(this, "Solo version Android 9(Pie) o 10 disponible para evaluar "+Verify.getVersion())
         }
 
         if(!Verify.isNetworkAvailable(this)){
