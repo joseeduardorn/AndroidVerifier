@@ -76,7 +76,7 @@ public class JSONBuilder {
             localObject.put(JSONBuilder.SCREEN_OFF_TIMEOUT, Verify.getScreenOffTimeout(context));
             localObject.put(JSONBuilder.TEXT_SHOW_PASSWORD, Verify.isTextShowPasswordEnabled(context));
             localObject.put(JSONBuilder.LOCK_SCREEN_AFTER, Verify.getLockscreenAfter(context));
-
+            //Log.d("isTextShowPassword", String.valueOf(Verify.isTextShowPasswordEnabled(context)));
             localObject.put(JSONBuilder.DEVICE_NAME, Verify.getDeviceName());
             localObject.put(JSONBuilder.BLUETOOTH_NAME, Verify.getLocalBluetoothName());
             localObject.put(JSONBuilder.DHCP_INFO, Verify.getDHCPInfo(context));
