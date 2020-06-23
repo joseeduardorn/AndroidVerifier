@@ -9,4 +9,4 @@ Android Version Compatible
 Android Pie(9) 
 Android 10
 
-API 28 y 29
+API 28, 29
